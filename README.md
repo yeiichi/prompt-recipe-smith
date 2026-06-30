@@ -140,16 +140,6 @@ uv run mypy src
 uv build
 ```
 
-## Documentation CI
-
-GitHub Actions builds the Sphinx docs when documentation-related files change.
-On pushes to `main`, a successful docs build triggers a Read the Docs webhook.
-
-Configure these repository secrets before relying on the RTD trigger:
-
-- `RTD_WEBHOOK_URL`: the Read the Docs generic incoming webhook URL.
-- `RTD_WEBHOOK_TOKEN`: the token shown for that RTD webhook integration.
-
 ## Scope
 
 The first version supports plain text and JSON output. JSONL, Gemini,

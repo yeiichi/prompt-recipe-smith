@@ -1,9 +1,5 @@
-"""Sphinx configuration for prompt-recipe-smith documentation."""
-
-from __future__ import annotations
-
+# docs/source/conf.py
 import sys
-from importlib.metadata import PackageNotFoundError, version as package_version
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -13,22 +9,15 @@ if SRC.exists():
 else:
     sys.path.insert(0, str(ROOT))
 
-project = "prompt-recipe-smith"
+project = "smith-utils"
 author = "Eiichi YAMAMOTO"
 copyright = "2026, Eiichi YAMAMOTO"
-
-try:
-    release = package_version("prompt-recipe-smith")
-except PackageNotFoundError:
-    release = "0.0.0"
-version = release
 
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    "myst_parser",
 ]
 
 autodoc_default_options = {
@@ -37,28 +26,14 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 
-source_suffix = {
-    ".rst": "restructuredtext",
-    ".md": "markdown",
-}
-
-master_doc = "index"
-exclude_patterns = [
-    "Thumbs.db",
-    ".DS_Store",
-]
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 html_theme = "furo"
-html_title = "prompt-recipe-smith"
 html_static_path = ["_static"]
 
 html_theme_options = {
     "sidebar_hide_name": False,
 }
-
-myst_enable_extensions = [
-    "colon_fence",
-    "deflist",
-]
 
 autosummary_generate = True
