@@ -4,3 +4,7 @@ class PromptRecipeSmithError(Exception):
 
 class TooManyBranchesError(PromptRecipeSmithError):
     """Raised when a recipe defines more than three branches."""
+
+
+class TooManyQuestionsError(PromptRecipeSmithError):
+    """Raised when a recipe defines more than three layered questions."""

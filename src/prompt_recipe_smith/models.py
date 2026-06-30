@@ -3,9 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from prompt_recipe_smith.exceptions import TooManyBranchesError
+from prompt_recipe_smith.exceptions import TooManyBranchesError, TooManyQuestionsError
 
 MAX_BRANCHES = 3
+MAX_LAYERED_QUESTIONS = 3
 
 
 @dataclass(frozen=True)
@@ -25,12 +26,23 @@ class PromptBranch:
     name: str
     description: str
     keyword: str | None = None
+    keywords: tuple[str, ...] = ()
     template: PromptTemplate | None = None
 
     def matches(self, user_input: str) -> bool:
-        if self.keyword is None:
-            return False
-        return self.keyword.casefold() in user_input.casefold()
+        keywords = self.keywords
+        if self.keyword is not None:
+            keywords = (self.keyword, *keywords)
+        normalized_input = user_input.casefold()
+        return any(keyword.casefold() in normalized_input for keyword in keywords)
+
+
+@dataclass(frozen=True)
+class PromptQuestion:
+    """One clarification question asked before rendering a final prompt."""
+
+    key: str
+    text: str
 
 
 @dataclass(frozen=True)
@@ -42,6 +54,8 @@ class PromptRecipe:
     final_template: PromptTemplate
     steps: tuple[str, ...] = ()
     branches: tuple[PromptBranch, ...] = ()
+    questions: tuple[PromptQuestion, ...] = ()
+    layered_final_template: PromptTemplate | None = None
     examples: tuple[str, ...] = ()
     defaults: dict[str, str] = field(default_factory=dict)
 
@@ -49,6 +63,12 @@ class PromptRecipe:
         if len(self.branches) > MAX_BRANCHES:
             msg = f"PromptRecipe supports up to {MAX_BRANCHES} branches."
             raise TooManyBranchesError(msg)
+        if len(self.questions) > MAX_LAYERED_QUESTIONS:
+            msg = (
+                "PromptRecipe supports up to "
+                f"{MAX_LAYERED_QUESTIONS} layered questions."
+            )
+            raise TooManyQuestionsError(msg)
 
 
 @dataclass(frozen=True)
@@ -58,6 +78,9 @@ class PromptSession:
     recipe_name: str
     user_input: str
     selected_branch: str | None = None
+    answers: tuple[tuple[str, str], ...] = ()
+    next_question: PromptQuestion | None = None
+    complete: bool = False
 
 
 @dataclass(frozen=True)
@@ -70,8 +93,9 @@ class PromptResult:
     selected_branch: str | None = None
     steps: tuple[str, ...] = ()
     provider: str = "chatgpt"
+    answers: tuple[tuple[str, str], ...] = ()
 
-    def to_dict(self) -> dict[str, str | list[str] | None]:
+    def to_dict(self) -> dict[str, str | list[str] | dict[str, str] | None]:
         return {
             "prompt": self.prompt,
             "recipe_name": self.recipe_name,
@@ -79,6 +103,7 @@ class PromptResult:
             "selected_branch": self.selected_branch,
             "steps": list(self.steps),
             "provider": self.provider,
+            "answers": dict(self.answers),
         }
 
 

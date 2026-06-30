@@ -22,4 +22,18 @@ def test_json_output_serializes_result() -> None:
         "selected_branch": "branch",
         "steps": ["one", "two"],
         "provider": "chatgpt",
+        "answers": {},
     }
+
+
+def test_json_output_preserves_multibyte_text() -> None:
+    result = PromptResult(
+        prompt="ワークショップを計画したい",
+        recipe_name="recipe",
+        user_input="議題を整理する",
+    )
+
+    payload = to_json(result)
+
+    assert "ワークショップを計画したい" in payload
+    assert "\\u30ef" not in payload

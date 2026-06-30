@@ -2,9 +2,11 @@ import pytest
 
 from prompt_recipe_smith import (
     PromptBranch,
+    PromptQuestion,
     PromptRecipe,
     PromptTemplate,
     TooManyBranchesError,
+    TooManyQuestionsError,
 )
 
 
@@ -48,5 +50,20 @@ def test_recipe_creation_rejects_more_than_three_branches() -> None:
                 PromptBranch("b", "B", "b"),
                 PromptBranch("c", "C", "c"),
                 PromptBranch("d", "D", "d"),
+            ),
+        )
+
+
+def test_recipe_creation_rejects_more_than_three_questions() -> None:
+    with pytest.raises(TooManyQuestionsError, match="up to 3 layered questions"):
+        PromptRecipe(
+            name="too-many-questions",
+            description="Four questions are not supported.",
+            final_template=PromptTemplate("{user_input}"),
+            questions=(
+                PromptQuestion("a", "A?"),
+                PromptQuestion("b", "B?"),
+                PromptQuestion("c", "C?"),
+                PromptQuestion("d", "D?"),
             ),
         )
