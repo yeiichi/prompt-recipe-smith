@@ -51,6 +51,9 @@ Open the `Google Colab demo notebook <https://colab.research.google.com/github/y
 to try installation, one-shot prompt building, the three-question layered flow,
 multilingual answers, and JSON output.
 
+For a deployed Django webpage that applies the package, see
+`Prompt Generator <https://yeiichi.com/promptgen/>`_.
+
 Generated reference
 ===================
 

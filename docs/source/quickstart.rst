@@ -65,3 +65,9 @@ Colab notebook
 
 Open the `prompt-recipe-smith Colab notebook <https://colab.research.google.com/github/yeiichi/prompt-recipe-smith/blob/main/examples/prompt_recipe_smith_colab_demo.ipynb>`_
 to try the same flow in a browser without setting up a local environment.
+
+Applied Django webpage
+----------------------
+
+For a deployed webpage that applies the package in a Django experience, see
+`Prompt Generator <https://yeiichi.com/promptgen/>`_.
