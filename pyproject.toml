@@ -26,6 +26,7 @@ dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/yeiichi/prompt-recipe-smith"
+Documentation = "https://prompt-recipe-smith.readthedocs.io/"
 Repository = "https://github.com/yeiichi/prompt-recipe-smith"
 Issues = "https://github.com/yeiichi/prompt-recipe-smith/issues"
 
